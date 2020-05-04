@@ -1,0 +1,43 @@
+{
+    "he": {
+        "RTL": true,
+        "title": "עברית",
+        "SCREEN_LOADING": {
+            "title": "טוען נתונים",
+            "filter": false
+        },
+        "SCREEN_HOME": {
+            "title": "דף בית",
+            "loading": "טוען נתונים",
+            "filter": true
+        },
+        "SCREEN_LOGIN": {
+            "title": "התחברות",
+            "filter": false
+        },
+        "SCREEN_MEMBER": {
+            "title": "פרטים",
+            "filter": false
+        }
+    },
+    "en": {
+        "RTL": false,
+        "title": "English",
+        "SCREEN_LOADING": {
+            "title": "Loading Data",
+            "filter": false
+        },
+        "SCREEN_HOME": {
+            "title": "Home",
+            "filter": true
+        },
+        "SCREEN_LOGIN": {
+            "title": "Login",
+            "filter": false
+        },
+        "SCREEN_MEMBER": {
+            "title": "Information",
+            "filter": false
+        }
+    }
+}

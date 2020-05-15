@@ -54,7 +54,7 @@ class MemberScreen extends ScreenComponet<ScreenViewModel> {
       Expanded(
           child: Container(
               color: Theme.of(context).highlightColor,
-              child: KnessetChart.fromMember(member))),
+              child: KnessetChart.fromMember(member, false))),
     ];
     //Map stats = member.knessetAttendance;
     //if (stats.entries.length > 0)

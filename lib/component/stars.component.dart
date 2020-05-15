@@ -13,19 +13,23 @@ class StarRating extends StatelessWidget {
 
   Widget buildStar(BuildContext context, int index) {
     Icon icon;
+    double size = 20;
     if (index >= rating) {
       icon = new Icon(
         Icons.star_border,
+        size: size,
         color: Theme.of(context).buttonColor,
       );
     } else if (index > rating - 1 && index < rating) {
       icon = new Icon(
         Icons.star_half,
+        size: size,
         color: color ?? Theme.of(context).primaryColor,
       );
     } else {
       icon = new Icon(
         Icons.star,
+        size: size,
         color: color ?? Theme.of(context).primaryColor,
       );
     }

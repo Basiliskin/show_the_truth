@@ -5,14 +5,15 @@ import 'package:knesset_odata/model/kneset.model.dart';
 class KnessetChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
-
-  KnessetChart(this.seriesList, {this.animate});
+  final bool offscreen;
+  KnessetChart(this.seriesList, {this.animate, this.offscreen});
 
   /// Creates a [LineChart] with sample data and no transition.
-  factory KnessetChart.fromMember(KnesetMember member) {
+  factory KnessetChart.fromMember(KnesetMember member, bool offscreen) {
     return new KnessetChart(
-      _createData(member),
+      _createData(member, offscreen),
       // Disable animations for image tests.
+      offscreen: offscreen,
       animate: false,
     );
   }
@@ -21,16 +22,29 @@ class KnessetChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Directionality(
         textDirection: TextDirection.ltr,
-        child: new charts.BarChart(
-          seriesList,
-          animate: animate,
-          barGroupingType: charts.BarGroupingType.groupedStacked,
-        ));
+        child: offscreen
+            ? charts.BarChart(
+                seriesList,
+                primaryMeasureAxis: new charts.NumericAxisSpec(
+                    renderSpec: new charts.NoneRenderSpec()),
+                domainAxis: new charts.OrdinalAxisSpec(
+                    // Make sure that we draw the domain axis line.
+                    showAxisLine: true,
+                    // But don't draw anything else.
+                    renderSpec: new charts.NoneRenderSpec()),
+                animate: animate,
+                barGroupingType: charts.BarGroupingType.groupedStacked,
+              )
+            : charts.BarChart(
+                seriesList,
+                animate: animate,
+                barGroupingType: charts.BarGroupingType.groupedStacked,
+              ));
   }
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<LinearValue, String>> _createData(
-      KnesetMember member) {
+      KnesetMember member, bool offscreen) {
     final Map stats = member.stats;
     final List<LinearValue> total = [];
     final List<LinearValue> totalDone = [];

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:knesset_odata/component/stars.component.dart';
 import 'package:knesset_odata/model/kneset.model.dart';
 import 'package:flutter/material.dart';
+import 'package:knesset_odata/util/widget.to.image.dart';
 
 final _random = new Random();
 int next(int min, int max) => min + _random.nextInt(max - min);
@@ -44,6 +45,7 @@ class _MemberDescription extends StatelessWidget {
           )
         : Text('');
     int totalDone = 0;
+
     member.stats.entries.forEach((f) => {totalDone += f.value["done"]});
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,20 +55,8 @@ class _MemberDescription extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(
-                    '${member.fullName}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.only(left: 2.0, right: 2.0)),
-                  city,
-                ],
-              ),
+              Padding(padding: EdgeInsets.only(bottom: 2.0)),
+              Row(children: <Widget>[city]),
               Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Row(
                 children: <Widget>[
@@ -89,9 +79,14 @@ class _MemberDescription extends StatelessWidget {
                       color: Colors.black54,
                     ),
                   ),
+                ],
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 2.0)),
+              Row(
+                children: <Widget>[
                   Padding(padding: EdgeInsets.only(left: 2.0, right: 2.0)),
                   Text(
-                    ', תפקידים/מפלגות :',
+                    'תפקידים/מפלגות :',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -111,7 +106,6 @@ class _MemberDescription extends StatelessWidget {
                   ),
                 ],
               ),
-              Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Row(
                 children: <Widget>[
                   Text(
@@ -181,20 +175,37 @@ class KnesetMemberListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final KnessetChartImageWidget chart = new KnessetChartImageWidget(member);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: SizedBox(
-        height: 100,
+        height: 120,
+        width: 80,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             AspectRatio(
-              aspectRatio: 1.2,
+              aspectRatio: 1,
               child: Column(
                 children: <Widget>[
-                  thumbnail,
-                  new StarRating(
-                    rating: member.stars,
+                  Align(
+                      alignment: Alignment.center,
+                      child: Container(child: thumbnail)),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                          child: Text(
+                        '${member.fullName}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ))),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(child: StarRating(rating: member.stars)),
                     //onRatingChanged: (rating) => setState(() => this.rating = rating),
                   ),
                 ],
@@ -205,7 +216,13 @@ class KnesetMemberListItem extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
                 child: _MemberDescription(member: member),
               ),
-            )
+            ),
+            AspectRatio(
+              aspectRatio: 1,
+              child: Flexible(
+                child: chart,
+              ),
+            ),
           ],
         ),
       ),

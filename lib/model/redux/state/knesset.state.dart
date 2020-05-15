@@ -6,24 +6,31 @@ class KnessetState {
   final KnessetFilter knessetFilter;
   final List<dynamic> knessetMember;
   final List<int> indexes;
+  final List<KnessetAttendanceData> knessetAttendance;
 
   KnessetState(
       {@required this.knessetFilter,
       @required this.knessetMember,
-      @required this.indexes});
+      @required this.indexes,
+      @required this.knessetAttendance});
 
   factory KnessetState.initial() {
     return new KnessetState(
-        knessetFilter: null, knessetMember: null, indexes: []);
+        knessetFilter: null,
+        knessetMember: null,
+        indexes: [],
+        knessetAttendance: null);
   }
 
   KnessetState copyWith(
       {KnessetFilter knessetFilter,
       List<dynamic> knessetMember,
-      List<int> indexes}) {
+      List<int> indexes,
+      List<dynamic> knessetAttendance}) {
     return new KnessetState(
         knessetMember: knessetMember ?? this.knessetMember,
         knessetFilter: knessetFilter ?? this.knessetFilter,
-        indexes: indexes ?? this.indexes);
+        indexes: indexes ?? this.indexes,
+        knessetAttendance: knessetAttendance ?? this.knessetAttendance);
   }
 }

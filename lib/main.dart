@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:knesset_odata/screen/time.screen.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -98,6 +99,9 @@ class _AppViewState extends State<AppView> {
         },
         Routes.memberScreen: (context) {
           return MemberScreen();
+        },
+        Routes.timeScreen: (context) {
+          return TimeScreen();
         }
       },
     );

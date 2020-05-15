@@ -8,7 +8,7 @@ import 'package:knesset_odata/util/request.dart';
 
 const MOKING_ENABLED = true;
 const FIREBASE_MOKING_ENABLED = MOKING_ENABLED;
-const FAB_ENABLED = false;
+const FAB_ENABLED = true;
 const MENU_ENABLED = false;
 
 @immutable

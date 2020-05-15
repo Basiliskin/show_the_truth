@@ -15,7 +15,8 @@ KnessetState _loadKnesetDataAction(
   return state.copyWith(
       indexes: indexes,
       knessetFilter: action.knessetFilter,
-      knessetMember: action.knessetMember);
+      knessetMember: action.knessetMember,
+      knessetAttendance: action.knessetAttendance);
 }
 
 KnessetState _updateIndexesAction(

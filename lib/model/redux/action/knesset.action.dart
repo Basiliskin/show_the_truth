@@ -49,7 +49,8 @@ ThunkAction<AppState> updateIndexes(Map<String, bool> filter) {
       final Map<String, FilterCallback> filterFunction = {
         "stars": (String name, KnesetMember member) {
           double star = double.parse(name.replaceAll("+", ""));
-          return member.stars >= star && member.stars < star + 1;
+          return (star == 4 && member.stars >= star ||
+              member.stars >= star && member.stars < star + 1);
         },
         "fullName": (String name, KnesetMember member) {
           return member.fullName == name;

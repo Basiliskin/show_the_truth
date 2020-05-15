@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:knesset_odata/model/navigation.model.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -62,9 +63,25 @@ class ScreenComponetState<T extends ScreenViewModel>
         : {"title": "Home"};
     final String title = screenData["title"];
     final double transformMenu = -8.0;
-    final double padding = 16.0;
 
-    FabCircularMenu menu = FAB_ENABLED
+    List<Widget> menuItems = <Widget>[];
+    if (FAB_ENABLED && screenData["filter"]) {
+      menuItems.add(IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+            _showDialog(context, viewModel);
+            changeNotifier.sink.add(null);
+          }));
+      menuItems.add(IconButton(
+          icon: Icon(Icons.timeline),
+          onPressed: () {
+            //viewModel.changeCurrentLanguage("he");
+            Navigator.pushNamed(context, Routes.timeScreen);
+            changeNotifier.sink.add(null);
+          }));
+    }
+
+    FabCircularMenu menu = menuItems.length > 0
         ? FabCircularMenu(
             shouldTriggerChange: changeNotifier.stream,
             ringDiameter: 200,
@@ -72,20 +89,7 @@ class ScreenComponetState<T extends ScreenViewModel>
                 ? Matrix4.translationValues(transformMenu, 0.0, 0.0)
                 : Matrix4.translationValues(-transformMenu, 0.0, 0.0),
             alignment: rtl ? Alignment.bottomLeft : Alignment.bottomRight,
-            children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.home),
-                    onPressed: () {
-                      viewModel.changeCurrentLanguage("he");
-                      changeNotifier.sink.add(null);
-                    }),
-                IconButton(
-                    icon: Icon(Icons.favorite),
-                    onPressed: () {
-                      viewModel.changeCurrentLanguage("en");
-                      changeNotifier.sink.add(null);
-                    })
-              ])
+            children: menuItems)
         : null;
 
     List<Widget> widgetList = new List<Widget>();
@@ -100,21 +104,6 @@ class ScreenComponetState<T extends ScreenViewModel>
         textMessage: screenData["loading"] ?? "Loading");
 
     List<Widget> filterComponent = <Widget>[];
-    if (screenData["filter"]) {
-      filterComponent.add(Padding(
-          padding: rtl
-              ? EdgeInsets.only(left: padding)
-              : EdgeInsets.only(right: padding),
-          child: GestureDetector(
-            onTap: () {
-              _showDialog(context, viewModel);
-            },
-            child: Icon(
-              Icons.filter_list,
-              size: 26.0,
-            ),
-          )));
-    }
 
     final scaffold = Scaffold(
         drawer: MENU_ENABLED ? NavDrawer(title) : null,

@@ -10,8 +10,10 @@ import 'package:knesset_odata/model/redux/state/app.state.dart';
 class LoadKnesetDataAction {
   final KnessetFilter knessetFilter;
   final List<dynamic> knessetMember;
+  final List<KnessetAttendanceData> knessetAttendance;
 
-  LoadKnesetDataAction(this.knessetFilter, this.knessetMember);
+  LoadKnesetDataAction(
+      this.knessetFilter, this.knessetMember, this.knessetAttendance);
 }
 
 ThunkAction<AppState> loadKnesetData() {
@@ -25,7 +27,14 @@ ThunkAction<AppState> loadKnesetData() {
             .map((e) => KnesetMember.fromJson(e.value))
             .toList();
 
-        store.dispatch(new LoadKnesetDataAction(knessetFilter, knessetMember));
+        final Map attendance = appData["attendance"];
+        final List<KnessetAttendanceData> knessetAttendance = [];
+
+        attendance["knessetAttendance"].forEach((value) =>
+            knessetAttendance.add(KnessetAttendanceData.fromJson(value)));
+
+        store.dispatch(new LoadKnesetDataAction(
+            knessetFilter, knessetMember, knessetAttendance));
       } catch (e) {
         print(e);
       }

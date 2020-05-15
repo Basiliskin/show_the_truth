@@ -20,7 +20,7 @@ class HeadingItem implements ListItem {
   Widget buildItem(BuildContext context) {
     return Text(
       heading,
-      style: Theme.of(context).textTheme.headline,
+      style: Theme.of(context).textTheme.headline1,
     );
   }
 }

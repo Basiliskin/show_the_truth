@@ -18,6 +18,10 @@
         "SCREEN_MEMBER": {
             "title": "פרטים",
             "filter": false
+        },
+        "SCREEN_TIME": {
+            "title": "נוכחות כללית",
+            "filter": false
         }
     },
     "en": {
@@ -37,6 +41,10 @@
         },
         "SCREEN_MEMBER": {
             "title": "Information",
+            "filter": false
+        },
+        "SCREEN_TIME": {
+            "title": "Attendancy",
             "filter": false
         }
     }

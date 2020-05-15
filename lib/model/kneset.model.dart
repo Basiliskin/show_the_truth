@@ -55,6 +55,16 @@ class KnessetFilter {
         year = convertIntList(appData["filters"]["year"]);
 }
 
+class KnessetAttendanceData {
+  Map data;
+  /*
+  String knessetNum;
+  int total;
+  int member;
+  double ratio;*/
+  KnessetAttendanceData.fromJson(Map member) : data = member;
+}
+
 class KnesetMember {
   int age;
   String birthCountry;

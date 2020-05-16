@@ -78,7 +78,9 @@ ThunkAction<AppState> updateIndexes(Map<String, bool> filter) {
         },
       };
       Map<String, List<String>> keyWord = {};
-      Map<int, bool> found = {};
+      Map<int, int> found = {};
+      mm.forEach((index, value) => found[index] = 1);
+
       selected.forEach((f) => {
             attr = f.key.split("|"),
             keyWord[attr[0]] = keyWord[attr[0]] ?? [],
@@ -91,12 +93,12 @@ ThunkAction<AppState> updateIndexes(Map<String, bool> filter) {
             if (cb != null)
               {
                 f.value.forEach((word) => {
-                      mm.forEach((index, value) =>
-                          found[index] = found[index] ?? cb(word, value))
+                      mm.forEach((index, value) => found[index] =
+                          found[index] < 3 && cb(word, value) ? 2 : 3)
                     })
               }
           });
-      found.entries.forEach((e) => {if (e.value) indexes.add(e.key)});
+      found.entries.forEach((e) => {if (e.value == 2) indexes.add(e.key)});
     } else {
       mm.forEach((index, value) => indexes.add(index));
     }

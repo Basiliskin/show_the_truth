@@ -28,10 +28,13 @@ class KnessetChart extends StatelessWidget {
                 primaryMeasureAxis: new charts.NumericAxisSpec(
                     renderSpec: new charts.NoneRenderSpec()),
                 domainAxis: new charts.OrdinalAxisSpec(
-                    // Make sure that we draw the domain axis line.
-                    showAxisLine: true,
-                    // But don't draw anything else.
-                    renderSpec: new charts.NoneRenderSpec()),
+                  renderSpec: charts.GridlineRendererSpec(
+                    labelStyle: new charts.TextStyleSpec(
+                        fontSize: 8, // size in Pts.
+                        color: charts.MaterialPalette.black),
+                    labelRotation: 45,
+                  ),
+                ),
                 animate: animate,
                 barGroupingType: charts.BarGroupingType.groupedStacked,
               )

@@ -186,30 +186,27 @@ class KnesetMemberListItem extends StatelessWidget {
           children: <Widget>[
             AspectRatio(
               aspectRatio: 1,
-              child: Column(
-                children: <Widget>[
-                  Align(
-                      alignment: Alignment.center,
-                      child: Container(child: thumbnail)),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          child: Text(
-                        '${member.fullName}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ))),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(child: StarRating(rating: member.stars)),
-                    //onRatingChanged: (rating) => setState(() => this.rating = rating),
-                  ),
-                ],
-              ),
+              child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                          alignment: Alignment.center,
+                          child: Column(children: <Widget>[
+                            thumbnail,
+                            Text(
+                              '${member.fullName}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ])),
+                      Center(child: StarRating(rating: member.stars))
+                    ],
+                  )),
             ),
             Expanded(
               child: Padding(
@@ -219,9 +216,7 @@ class KnesetMemberListItem extends StatelessWidget {
             ),
             AspectRatio(
               aspectRatio: 1,
-              child: Flexible(
-                child: chart,
-              ),
+              child: chart,
             ),
           ],
         ),

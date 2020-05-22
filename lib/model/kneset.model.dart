@@ -83,6 +83,7 @@ class KnesetMember {
   int total;
   int totalDone;
   Map knessetAttendance;
+  int personID;
 
   KnesetMember.fromJson(Map member)
       : age = member['age'] ?? 0,
@@ -105,5 +106,6 @@ class KnesetMember {
         stars = 1.0 * member['stars'] ?? 0.0,
         total = member['total'] ?? 0,
         totalDone = member['totalDone'] ?? 0,
-        knessetAttendance = member['knessetAttendance'] ?? {};
+        knessetAttendance = member['knessetAttendance'] ?? {},
+        personID = int.parse(member['personID']) ?? 0;
 }

@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:knesset_odata/model/redux/state/app.state.dart';
 import 'package:knesset_odata/model/viewmodel/start.viewmodel.dart';
 import 'package:knesset_odata/view/error.dialog.dart';
+import 'package:knesset_odata/widget/wave.progress.dart';
 
 class StartScreen extends StatefulWidget {
   final Function(StartViewModel viewModel) loadFirebase;
@@ -35,7 +36,7 @@ class StartScreenState extends State<StartScreen> {
 
   Widget getLoadingIndicator(StartViewModel viewModel) {
     if (viewModel.isLoading > 0) {
-      return new CircularProgressIndicator();
+      return WaveProgress(180.0, Colors.blue, Colors.blueAccent, 40.0);
     }
     return new Container();
   }
@@ -51,12 +52,7 @@ class StartScreenState extends State<StartScreen> {
     List<Widget> children;
     children = <Widget>[
       Padding(
-        padding: EdgeInsets.only(top: 50, bottom: 50.0),
-        child: Image.asset(
-          "assets/image/logo.png",
-          width: 300,
-          height: 150,
-        ),
+        padding: EdgeInsets.only(top: 80, bottom: 80.0),
       ),
       getLoadingIndicator(viewModel)
     ];

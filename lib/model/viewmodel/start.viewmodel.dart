@@ -1,6 +1,5 @@
 import 'package:redux/redux.dart';
 import 'package:knesset_odata/model/redux/action/config.action.dart';
-import 'package:knesset_odata/model/redux/action/screen.action.dart';
 import 'package:knesset_odata/model/redux/state/app.state.dart';
 import 'package:knesset_odata/service/kneset.service.dart';
 
@@ -33,9 +32,7 @@ class StartViewModel {
             ? store.state.screenState.screen(store.state.configState.language)
             : null,
         loadConfig: () {
-          store.dispatch(loadLanguageData());
           store.dispatch(loadKnesetData());
-          store.dispatch(loadConfigState());
         },
         firebaseToken: (String token) {
           print("firebaseMessaging: $token");

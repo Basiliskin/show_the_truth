@@ -85,9 +85,10 @@ class KnessetChartImageState extends State<KnessetChartImageWidget> {
     if (bytes == null)
       Future.delayed(Duration(milliseconds: 100), () async {
         knessetChartToImage(widget.member, key).then((data) {
-          setState(() {
-            bytes = data != null ? data.buffer.asUint8List() : null;
-          });
+          if (this.mounted)
+            setState(() {
+              bytes = data != null ? data.buffer.asUint8List() : null;
+            });
         });
       });
 

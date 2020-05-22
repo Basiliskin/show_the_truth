@@ -11,7 +11,7 @@ description: Knesset Statistics.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.6+6
+version: 1.0.7+7
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -46,6 +46,7 @@ dependencies:
   # reflectable: ^2.2.4
   charts_flutter: ^0.9.0
   flutter_launcher_icons: "^0.7.5"
+  xml2json: ^4.2.0 
   
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,8 @@ flutter:
     - assets/image/avatarB.png
     - assets/language/data.json
     - assets/kneset/app.data.v1.json
+    - assets/kneset/bills.xml
+    - assets/kneset/status.xml
     - assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

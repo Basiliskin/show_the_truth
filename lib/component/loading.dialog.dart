@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:knesset_odata/model/redux/state/app.state.dart';
 import 'package:knesset_odata/model/viewmodel/loading.viewmodel.dart';
+import 'package:knesset_odata/widget/wave.progress.dart';
 
 class ModalRoundedProgressBar extends StatefulWidget {
   final double opacity;
@@ -45,7 +46,7 @@ class _ModalRoundedProgressBarState extends State<ModalRoundedProgressBar> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CircularProgressIndicator(),
+                WaveProgress(180.0, Colors.blue, Colors.blueAccent, 40.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(widget.textMessage),

@@ -16,7 +16,8 @@ KnessetState _loadKnesetDataAction(
       indexes: indexes,
       knessetFilter: action.knessetFilter,
       knessetMember: action.knessetMember,
-      knessetAttendance: action.knessetAttendance);
+      knessetAttendance: action.knessetAttendance,
+      knessetMemberBill: action.knessetMemberBill);
 }
 
 KnessetState _updateIndexesAction(

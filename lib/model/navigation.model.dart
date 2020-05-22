@@ -9,4 +9,5 @@ class Routes {
   static final loginScreen = "SCREEN_LOGIN";
   static final memberScreen = "SCREEN_MEMBER";
   static final timeScreen = "SCREEN_TIME";
+  static final billScreen = "SCREEN_BILL";
 }

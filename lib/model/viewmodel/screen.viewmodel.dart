@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 import 'package:knesset_odata/model/redux/action/config.action.dart';
 import 'package:knesset_odata/model/redux/state/app.state.dart';
 import 'package:knesset_odata/model/redux/state/knesset.state.dart';
+import 'package:knesset_odata/service/kneset.service.dart';
 
 typedef S ScreenViewModelFromStore<S>(Store<AppState> store);
 
@@ -19,6 +20,7 @@ class ScreenViewModel {
   final Function(String language) changeCurrentLanguage;
   final Function(Map<String, bool> filters) onFilterUpdate;
   final Function() onResetFilter;
+  final Function() loadBill;
 
   ScreenViewModel(
       {this.isLoading,
@@ -32,7 +34,8 @@ class ScreenViewModel {
       this.knessetState,
       this.onFilterUpdate,
       this.filter,
-      this.onResetFilter});
+      this.onResetFilter,
+      this.loadBill});
 
   static ScreenViewModel fromStore(Store<AppState> store) {
     return ScreenViewModel(
@@ -52,6 +55,9 @@ class ScreenViewModel {
         },
         onResetFilter: () {
           store.dispatch(resetFilter());
+        },
+        loadBill: () {
+          store.dispatch(loadBillData());
         },
         filter: store.state.configState.filter);
   }

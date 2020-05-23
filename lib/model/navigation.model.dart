@@ -10,4 +10,5 @@ class Routes {
   static final memberScreen = "SCREEN_MEMBER";
   static final timeScreen = "SCREEN_TIME";
   static final billScreen = "SCREEN_BILL";
+  static final lawScreen = "SCREEN_LAW";
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:knesset_odata/screen/bill.screen.dart';
+import 'package:knesset_odata/screen/law.screen.dart';
 import 'package:knesset_odata/screen/time.screen.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -106,6 +107,9 @@ class _AppViewState extends State<AppView> {
         },
         Routes.billScreen: (context) {
           return BillScreen();
+        },
+        Routes.lawScreen: (context) {
+          return LawScreen();
         }
       },
     );

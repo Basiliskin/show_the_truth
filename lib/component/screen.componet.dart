@@ -86,6 +86,13 @@ class ScreenComponetState<T extends ScreenViewModel>
             Navigator.pushNamed(context, Routes.billScreen);
             changeNotifier.sink.add(null);
           }));
+      menuItems.add(IconButton(
+          icon: Icon(Icons.label_important),
+          onPressed: () {
+            viewModel.loadLaw();
+            Navigator.pushNamed(context, Routes.lawScreen);
+            changeNotifier.sink.add(null);
+          }));
     }
 
     FabCircularMenu menu = menuItems.length > 0

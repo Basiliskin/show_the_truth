@@ -26,6 +26,10 @@
         "SCREEN_BILL": {
             "title": "הצעות חוק",
             "filter": false
+        },
+        "SCREEN_LAW": {
+            "title": "חוקים",
+            "filter": false
         }
     },
     "en": {
@@ -53,6 +57,10 @@
         },
         "SCREEN_BILL": {
             "title": "Bill",
+            "filter": false
+        },
+        "SCREEN_LAW": {
+            "title": "Laws",
             "filter": false
         }
     }

@@ -60,54 +60,43 @@ class LawListItem {
   LawListItem(this.law);
 }
 
-/*
-class ODataLaw {
-  String baseUrl =
-      "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_Law()?\$filter=KnessetNum%20ge%2017&\$orderby=KnessetNum%20desc,LastUpdatedDate%20desc,LawID%20desc";
-  OData data;
-  List<LawListItem> lawList = [];
-  ODataLaw(this.data);
-  reset() {
-    data.init(baseUrl);
-  }
-
-  Future<List<LawListItem>> nextPage() async {
-    http.Client _client = http.Client();
-    List<LawListItem> result = [];
-    if (data.items.length == 0 && data.nextLink == "") reset();
-    if (data.nextLink != "") {
-      var url = Uri.parse(data.nextLink);
-      var res = await _client.get(url);
-      OData tmp = parseOData(res.body);
-      LawListItem item;
-      var formatter = new DateFormat('dd/MM/yyyy');
-      tmp.items.forEach((element) {
-        element["LastUpdatedDate"] =
-            formatter.format(element["d:LastUpdatedDate"]);
-        element["PublicationDate"] =
-            formatter.format(element["d:PublicationDate"]);
-        item = LawListItem(element);
-        lawList.add(item);
-        result.add(item);
-      });
-      data.items.addAll(tmp.items);
-      data.nextLink = tmp.nextLink;
-    }
-    return result;
-  }
-}
-*/
-class ODataBillLaw {
-  String baseUrl =
-      "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$filter=KNS_Bill/StatusID%20eq%20118&\$orderby=BillID%20desc";
+class ODataBaseBill {
   OData data;
   Map<int, String> statusDic;
   Map memberDic;
   Map<int, BillListItem> billList = {};
-  ODataBillLaw(this.data, this.statusDic, this.memberDic);
+  DateFormat formatter = new DateFormat('dd-MM-yyyy');
+  String query = "";
+  ODataBaseBill(this.data, this.statusDic, this.memberDic);
+  getBaseUrl() {
+    return "";
+  }
+
+  search(value) async {
+    query = value;
+    if (value == "" || value == null) {
+      reset();
+    } else {
+      billList = {};
+      String url = getSearchUrl(value);
+      data.init(url);
+    }
+  }
+
   reset() {
-    billList = {};
-    data.init(baseUrl);
+    if (query == "") {
+      billList = {};
+      data.init(getBaseUrl());
+    }
+  }
+
+  handleItem(OData tmp) {
+    List<BillListItem> result = [];
+    return result;
+  }
+
+  getSearchUrl(value) {
+    return "";
   }
 
   Future<List<BillListItem>> nextPage() async {
@@ -118,65 +107,78 @@ class ODataBillLaw {
       var url = Uri.parse(data.nextLink);
       var res = await _client.get(url);
       OData tmp = parseOData(res.body);
-      int billID;
-      var formatter = new DateFormat('dd-MM-yyyy');
-      tmp.items.forEach((element) {
-        element["date"] = formatter.format(element["d:LastUpdatedDate"]);
-        element["info"] = memberDic[element["d:PersonID"]];
-        element["d:StatusTypeDesc"] = statusDic[element["d:StatusID"]];
-        billID = element["d:BillID"];
-        if (billList.containsKey(billID))
-          billList[billID].addMember(element["info"]);
-        else {
-          billList[billID] = new BillListItem(element, [element["info"]]);
-          result.add(billList[billID]);
-        }
-      });
-      data.items.addAll(tmp.items);
-      data.nextLink = tmp.nextLink;
+      return handleItem(tmp);
     }
     return result;
   }
 }
 
-class ODataBill {
-  String baseUrl =
-      "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$orderby=BillID%20desc";
-  OData data;
-  Map<int, String> statusDic;
-  Map memberDic;
-  Map<int, BillListItem> billList = {};
-  ODataBill(this.data, this.statusDic, this.memberDic);
-  reset() {
-    billList = {};
-    data.init(baseUrl);
+class ODataBillLaw extends ODataBaseBill {
+  ODataBillLaw(OData data, Map<int, String> statusDic, Map memberDic)
+      : super(data, statusDic, memberDic);
+  @override
+  getSearchUrl(value) {
+    return "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$filter=KNS_Bill/StatusID eq 118 and substringof('$value', KNS_Bill/Name) eq true&\$orderby=BillID desc";
   }
 
-  Future<List<BillListItem>> nextPage() async {
-    http.Client _client = http.Client();
+  @override
+  getBaseUrl() {
+    return "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$filter=KNS_Bill/StatusID%20eq%20118&\$orderby=BillID%20desc";
+  }
+
+  @override
+  handleItem(OData tmp) {
     List<BillListItem> result = [];
-    if (data.items.length == 0 && data.nextLink == "") reset();
-    if (data.nextLink != "") {
-      var url = Uri.parse(data.nextLink);
-      var res = await _client.get(url);
-      OData tmp = parseOData(res.body);
-      int billID;
-      var formatter = new DateFormat('dd-MM-yyyy');
-      tmp.items.forEach((element) {
-        element["date"] = formatter.format(element["d:LastUpdatedDate"]);
-        element["info"] = memberDic[element["d:PersonID"]];
-        element["d:StatusTypeDesc"] = statusDic[element["d:StatusID"]];
-        billID = element["d:BillID"];
-        if (billList.containsKey(billID))
-          billList[billID].addMember(element["info"]);
-        else {
-          billList[billID] = new BillListItem(element, [element["info"]]);
-          result.add(billList[billID]);
-        }
-      });
-      data.items.addAll(tmp.items);
-      data.nextLink = tmp.nextLink;
-    }
+    int billID;
+    tmp.items.forEach((element) {
+      element["date"] = formatter.format(element["d:LastUpdatedDate"]);
+      element["info"] = memberDic[element["d:PersonID"]];
+      element["d:StatusTypeDesc"] = statusDic[element["d:StatusID"]];
+      billID = element["d:BillID"];
+      if (billList.containsKey(billID))
+        billList[billID].addMember(element["info"]);
+      else {
+        billList[billID] = new BillListItem(element, [element["info"]]);
+        result.add(billList[billID]);
+      }
+    });
+    data.items.addAll(tmp.items);
+    data.nextLink = tmp.nextLink;
+    return result;
+  }
+}
+
+class ODataBill extends ODataBaseBill {
+  ODataBill(OData data, Map<int, String> statusDic, Map memberDic)
+      : super(data, statusDic, memberDic);
+  @override
+  getSearchUrl(value) {
+    return "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$filter=substringof('$value', KNS_Bill/Name) eq true&\$orderby=BillID desc";
+  }
+
+  @override
+  getBaseUrl() {
+    return "http://knesset.gov.il/Odata/ParliamentInfo.svc/KNS_BillInitiator()?\$expand=KNS_Bill&\$orderby=BillID%20desc";
+  }
+
+  @override
+  handleItem(OData tmp) {
+    List<BillListItem> result = [];
+    int billID;
+    tmp.items.forEach((element) {
+      element["date"] = formatter.format(element["d:LastUpdatedDate"]);
+      element["info"] = memberDic[element["d:PersonID"]];
+      element["d:StatusTypeDesc"] = statusDic[element["d:StatusID"]];
+      billID = element["d:BillID"];
+      if (billList.containsKey(billID))
+        billList[billID].addMember(element["info"]);
+      else {
+        billList[billID] = new BillListItem(element, [element["info"]]);
+        result.add(billList[billID]);
+      }
+    });
+    data.items.addAll(tmp.items);
+    data.nextLink = tmp.nextLink;
     return result;
   }
 }
@@ -195,6 +197,7 @@ OData parseOData(String xml) {
     nextLink = next["@href"];
   }
   List<dynamic> entry = feed["entry"];
+  if (entry == null) return OData([], nextLink);
   List<dynamic> list = [];
   entry.forEach((element) {
     Map properties = element["content"]["m:properties"];

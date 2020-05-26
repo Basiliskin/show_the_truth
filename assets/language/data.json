@@ -25,10 +25,12 @@
         },
         "SCREEN_BILL": {
             "title": "הצעות חוק",
+            "search": true,
             "filter": false
         },
         "SCREEN_LAW": {
             "title": "חוקים",
+            "search": true,
             "filter": false
         }
     },
@@ -57,10 +59,12 @@
         },
         "SCREEN_BILL": {
             "title": "Bill",
+            "search": true,
             "filter": false
         },
         "SCREEN_LAW": {
             "title": "Laws",
+            "search": true,
             "filter": false
         }
     }

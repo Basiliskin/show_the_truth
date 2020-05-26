@@ -13,6 +13,7 @@ import 'package:knesset_odata/widget/nav.drawer.dart';
 
 class ScreenComponet<T extends ScreenViewModel> extends StatefulWidget {
   final String screenName;
+
   ScreenComponet({Key key, @required this.screenName}) : super(key: key);
 
   @override
@@ -21,15 +22,28 @@ class ScreenComponet<T extends ScreenViewModel> extends StatefulWidget {
     return ScreenViewModel.fromStore(store);
   }
 
+  searchQueryValue(value) {
+    print(value);
+  }
+
+  searchReset() {}
+
   buildScreen(
       T viewModel, BuildContext context, BoxConstraints viewportConstraints) {}
+
+  deinit() {}
 }
 
 class ScreenComponetState<T extends ScreenViewModel>
     extends State<ScreenComponet> {
+  TextEditingController _searchQueryController = TextEditingController();
+  bool _isSearching = false;
+  String searchQuery = "Search query";
   final changeNotifier = new StreamController.broadcast();
   @override
   void dispose() {
+    widget.deinit();
+    _searchQueryController.dispose();
     changeNotifier.close();
     super.dispose();
   }
@@ -55,6 +69,78 @@ class ScreenComponetState<T extends ScreenViewModel>
     );
   }
 
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchQueryController,
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: "חפש...",
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.white30),
+      ),
+      style: TextStyle(color: Colors.white, fontSize: 16.0),
+      onChanged: (query) => updateSearchQuery(query),
+      onSubmitted: (value) => {
+        widget.searchQueryValue(value),
+        setState(() {
+          _isSearching = false;
+        })
+      },
+    );
+  }
+
+  _buildActions(List<Widget> filterComponent) {
+    if (_isSearching) {
+      filterComponent.add(IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          if (_searchQueryController == null ||
+              _searchQueryController.text.isEmpty) {
+            Navigator.pop(context);
+            return;
+          }
+          _clearSearchQuery();
+        },
+      ));
+    } else
+      filterComponent.add(IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: _startSearch,
+      ));
+  }
+
+  void _startSearch() {
+    ModalRoute.of(context)
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
+
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void updateSearchQuery(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+    });
+  }
+
+  void _stopSearching() {
+    _clearSearchQuery();
+
+    setState(() {
+      _isSearching = false;
+    });
+  }
+
+  void _clearSearchQuery() {
+    widget.searchReset();
+    setState(() {
+      _isSearching = false;
+      _searchQueryController.clear();
+      updateSearchQuery("");
+    });
+  }
+
   buildContent(
       T viewModel, BuildContext context, BoxConstraints viewportConstraints) {
     final bool rtl = viewModel.language == "he";
@@ -63,7 +149,7 @@ class ScreenComponetState<T extends ScreenViewModel>
         : {"title": "Home"};
     final String title = screenData["title"];
     final double transformMenu = -8.0;
-
+    bool _searchEnabled = screenData["search"] == true;
     List<Widget> menuItems = <Widget>[];
     if (FAB_ENABLED && screenData["filter"]) {
       menuItems.add(IconButton(
@@ -118,13 +204,24 @@ class ScreenComponetState<T extends ScreenViewModel>
         textMessage: screenData["loading"] ?? "Loading");
 
     List<Widget> filterComponent = <Widget>[];
-
+    if (_searchEnabled) {
+      _buildActions(filterComponent);
+    }
     final scaffold = Scaffold(
         drawer: MENU_ENABLED ? NavDrawer(title) : null,
         appBar: AppBar(
-          title: Text(title),
-          actions: filterComponent,
-        ),
+            leading: screenData["filter"] == false && _isSearching == false
+                ? IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Keys.navKey.currentState
+                          .pushReplacementNamed(Routes.homeScreen);
+                    })
+                : Container(),
+            title: _isSearching && _searchEnabled
+                ? _buildSearchField()
+                : Text(title),
+            actions: filterComponent),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

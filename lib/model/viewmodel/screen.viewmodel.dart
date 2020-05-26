@@ -22,6 +22,7 @@ class ScreenViewModel {
   final Function() onResetFilter;
   final Function() loadBill;
   final Function() loadLaw;
+  final Function(bool loading) setLoading;
 
   ScreenViewModel(
       {this.isLoading,
@@ -37,7 +38,8 @@ class ScreenViewModel {
       this.filter,
       this.onResetFilter,
       this.loadBill,
-      this.loadLaw});
+      this.loadLaw,
+      this.setLoading});
 
   static ScreenViewModel fromStore(Store<AppState> store) {
     return ScreenViewModel(
@@ -63,6 +65,9 @@ class ScreenViewModel {
         },
         loadLaw: () {
           store.dispatch(loadLawData());
+        },
+        setLoading: (bool loading) {
+          store.dispatch(new StartLoadingAction(loading ? 2 : 0));
         },
         filter: store.state.configState.filter);
   }
